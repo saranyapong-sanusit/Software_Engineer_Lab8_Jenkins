@@ -1,17 +1,8 @@
 *** Settings ***
 Library          SeleniumLibrary
 
-Suite Setup     Open Browser    https://example.com    chrome
+Suite Setup     Open Browser To Login Page
 Suite Teardown  Close Browser
-
-*** Keywords ***
-Open Browser To Login Page
-    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    Call Method   ${options}    add_argument    --headless=new
-    Call Method   ${options}    add_argument    --no-sandbox
-    Call Method   ${options}    add_argument    --disable-dev-shm-usage
-    Call Method   ${options}    add_argument    --disable-gpu
-    Open Browser  https://practicetestautomation.com/practice-test-login/    chrome    options=${options}
 
 *** Variables ***
 ${LOGIN URL}     https://practicetestautomation.com/practice-test-login/
@@ -19,6 +10,12 @@ ${VALID USER}    student
 ${VALID PASS}    Password123
 ${INVALID USER}  wrongUser
 ${INVALID PASS}  wrongPass
+
+*** Keywords ***
+Open Browser To Login Page
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].FirefoxOptions()    sys
+    Call Method   ${options}    add_argument    --headless
+    Open Browser  ${LOGIN URL}    firefox    options=${options}
 
 *** Test Cases ***
 
@@ -31,12 +28,14 @@ Valid Login Should Succeed
     Page Should Contain Button    Log out
 
 Invalid Username Should Show Error
+    Go To          ${LOGIN URL}
     Input Text     id:username      ${INVALID USER}
     Input Text     id:password      ${VALID PASS}
     Click Button   id:submit
     Page Should Contain           Your username is invalid!
 
 Invalid Password Should Show Error
+    Go To          ${LOGIN URL}
     Input Text     id:username      ${VALID USER}
     Input Text     id:password      ${INVALID PASS}
     Click Button   id:submit
