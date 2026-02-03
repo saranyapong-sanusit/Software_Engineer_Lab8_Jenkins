@@ -4,6 +4,15 @@ Library          SeleniumLibrary
 Suite Setup     Open Browser    https://example.com    chrome
 Suite Teardown  Close Browser
 
+*** Keywords ***
+Open Browser To Login Page
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+    Call Method   ${options}    add_argument    --headless=new
+    Call Method   ${options}    add_argument    --no-sandbox
+    Call Method   ${options}    add_argument    --disable-dev-shm-usage
+    Call Method   ${options}    add_argument    --disable-gpu
+    Open Browser  https://practicetestautomation.com/practice-test-login/    chrome    options=${options}
+
 *** Variables ***
 ${LOGIN URL}     https://practicetestautomation.com/practice-test-login/
 ${VALID USER}    student
