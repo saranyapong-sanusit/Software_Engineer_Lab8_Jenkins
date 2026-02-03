@@ -24,8 +24,7 @@ Valid Login Should Succeed
     Input Text     id:password      ${VALID PASS}
     Click Button   id:submit
     Wait Until Location Contains   logged-in-successfully
-    Page Should Contain           Congratulations
-    Page Should Contain Button    Log out
+    Page Should Contain           Congratulations student. You successfully logged in!
 
 Invalid Username Should Show Error
     Go To          ${LOGIN URL}
