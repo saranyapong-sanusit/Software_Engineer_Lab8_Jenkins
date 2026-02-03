@@ -11,7 +11,7 @@ Open Browser To Login Page
     Go To    https://computing.kku.ac.th
 
 *** Test Cases ***
-Open KKU Computing Website
-    Open Browser To Login Page
-    Close Browser
+Dummy Test For Jenkins
+    Log    Jenkins + Robot Framework works!
+
 
