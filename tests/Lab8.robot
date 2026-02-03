@@ -1,17 +1,35 @@
 *** Settings ***
-Library    SeleniumLibrary
+Library          SeleniumLibrary
 
-*** Keywords ***
-Open Browser To Login Page
-    ${chrome_options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    Call Method    ${chrome_options}    add_argument    --no-sandbox
-    Call Method    ${chrome_options}    add_argument    --disable-dev-shm-usage
-    Call Method    ${chrome_options}    add_argument    --headless
-    Create Webdriver    Chrome    options=${chrome_options}
-    Go To    https://computing.kku.ac.th
+Suite Setup     Open Browser    https://example.com    chrome
+Suite Teardown  Close Browser
+
+*** Variables ***
+${LOGIN URL}     https://practicetestautomation.com/practice-test-login/
+${VALID USER}    student
+${VALID PASS}    Password123
+${INVALID USER}  wrongUser
+${INVALID PASS}  wrongPass
 
 *** Test Cases ***
-Dummy Test For Jenkins
-    Log    Jenkins + Robot Framework works!
 
+Valid Login Should Succeed
+    Input Text     id:username      ${VALID USER}
+    Input Text     id:password      ${VALID PASS}
+    Click Button   id:submit
+    Wait Until Location Contains   logged-in-successfully
+    Page Should Contain           Congratulations
+    Page Should Contain Button    Log out
+
+Invalid Username Should Show Error
+    Input Text     id:username      ${INVALID USER}
+    Input Text     id:password      ${VALID PASS}
+    Click Button   id:submit
+    Page Should Contain           Your username is invalid!
+
+Invalid Password Should Show Error
+    Input Text     id:username      ${VALID USER}
+    Input Text     id:password      ${INVALID PASS}
+    Click Button   id:submit
+    Page Should Contain           Your password is invalid!
 
